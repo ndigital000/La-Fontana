@@ -1,0 +1,1099 @@
+/**
+ * =============================================================================
+ * GLOBALS.CSS — Design System "Luxury Dark" per La Fontana
+ * =============================================================================
+ * 
+ * STRUTTURA DEL FILE:
+ * 1. Import Tailwind (utility di base)
+ * 2. CSS Variables (colori, font, spacing — il "cervello" del design)
+ * 3. Reset e base styles
+ * 4. Tipografia
+ * 5. Componenti riutilizzabili (bottoni, card, badge, skeleton)
+ * 6. Sezioni specifiche (navbar, hero, menu, cocktail, bevande, contatti, footer)
+ * 7. Cookie Banner
+ * 8. Animazioni (@keyframes)
+ * 9. Responsive (media queries)
+ * 
+ * PER MODIFICARE I COLORI:
+ * Cambia SOLO le variabili in :root — tutti i componenti si aggiorneranno
+ * =============================================================================
+ */
+
+@import "tailwindcss";
+
+/* =============================================================================
+   1. CSS VARIABLES — Il "cervello" del design
+   Cambiando questi valori cambi l'intero aspetto del sito
+   ============================================================================= */
+:root {
+  /* --- Colori principali --- */
+  --gold: #C9A84C;              /* Oro — accento principale (bottoni, hover, dettagli) */
+  --gold-light: #D4B85A;        /* Oro chiaro — hover dell'oro */
+  --gold-dim: #A08535;          /* Oro scuro — bordi sottili */
+  
+  --accent: #C8C0B8;            /* Beige caldo — testi secondari eleganti */
+  --accent-light: #E0D8D0;      /* Beige chiaro — sottotitoli */
+  
+  /* --- Sfondi dark (dal più scuro al più chiaro) --- */
+  --dark-1: #050505;            /* Sfondo più scuro — footer */
+  --dark-2: #080808;            /* Sfondo base — body */
+  --dark-3: #0A0A0A;            /* Sfondo sezioni alternate */
+  --dark-4: #111111;            /* Card background */
+  --dark-5: #1A1A1A;            /* Bordi, separatori */
+  --dark-6: #222222;            /* Hover card */
+  
+  /* --- Testi --- */
+  --text-primary: #F0EDE8;      /* Testo principale — quasi bianco caldo */
+  --text-secondary: #9A9590;    /* Testo secondario — grigio medio */
+  --text-muted: #555555;        /* Testo molto attenuato — label, note */
+  --text-dark: #333333;         /* Testo su sfondi chiari */
+  
+  /* --- Effetti --- */
+  --glass-bg: rgba(255, 255, 255, 0.03);   /* Sfondo vetro */
+  --glass-border: rgba(255, 255, 255, 0.08); /* Bordo vetro */
+  --glow-gold: 0 0 20px rgba(201, 168, 76, 0.15); /* Bagliore dorato */
+  
+  /* --- Spacing --- */
+  --section-padding: 5rem 1.5rem;
+  --max-width: 800px;
+  
+  /* --- Transizioni --- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.2s var(--ease-out);
+  --transition-normal: 0.4s var(--ease-out);
+  --transition-slow: 0.6s var(--ease-out);
+}
+
+/* =============================================================================
+   2. RESET E BASE
+   ============================================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Previene il "layout shift" quando appare la scrollbar */
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: var(--dark-2);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* =============================================================================
+   3. TIPOGRAFIA
+   ============================================================================= */
+
+/* Font serif per titoli — eleganza "luxury" */
+.font-display {
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+}
+
+/* Titoli delle sezioni */
+.section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* Label piccole sopra i titoli (— Da mangiare —) */
+.section-label {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+/* =============================================================================
+   4. COMPONENTI RIUTILIZZABILI
+   ============================================================================= */
+
+/* --- Bottone primario (sfondo pieno) --- */
+.btn-primary {
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  background: var(--text-primary);
+  color: var(--dark-2);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  border-radius: 3px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background: var(--gold);
+  transform: translateY(-1px);
+}
+
+/* --- Bottone secondario (bordo) --- */
+.btn-outline {
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  border-radius: 3px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: var(--glow-gold);
+}
+
+/* --- Tab/Filtro (per categorie menu/cocktail) --- */
+.tab-btn {
+  padding: 0.5rem 1.2rem;
+  background: transparent;
+  color: var(--text-primary);
+  opacity: 0.6;
+  border: 1px solid var(--dark-5);
+  border-radius: 100px;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.tab-btn:hover {
+  opacity: 1;
+  border-color: var(--gold-dim);
+}
+
+.tab-btn.active {
+  background: var(--text-primary);
+  color: var(--dark-2);
+  opacity: 1;
+  border-color: var(--text-primary);
+}
+
+/* --- Card di un item (piatto, cocktail, bevanda) --- */
+.menu-card {
+  background: var(--dark-2);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  transition: background var(--transition-fast);
+}
+
+.menu-card:hover {
+  background: var(--dark-4);
+}
+
+/* --- Separatore decorativo --- */
+.divider {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  margin: 1rem auto;
+}
+
+/* --- Badge (es. "Best Seller") --- */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: rgba(201, 168, 76, 0.12);
+  color: var(--gold);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+}
+
+/* --- Skeleton loader (rettangolo animato durante il caricamento) --- */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--dark-5) 25%,
+    var(--dark-6) 50%,
+    var(--dark-5) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+.skeleton-text.medium {
+  width: 80%;
+}
+
+.skeleton-card {
+  height: 80px;
+  margin-bottom: 1px;
+}
+
+/* =============================================================================
+   5. NAVBAR
+   ============================================================================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.2rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+}
+
+.navbar-logo {
+  color: var(--gold);
+  font-size: 1.4rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.navbar-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+  position: relative;
+}
+
+.navbar-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width var(--transition-fast);
+}
+
+.navbar-link:hover {
+  color: var(--gold);
+}
+
+.navbar-link:hover::after {
+  width: 100%;
+}
+
+/* Hamburger menu (mobile) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.hamburger.open span:first-child {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:last-child {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile menu overlay */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(5, 5, 5, 0.98);
+  z-index: 99;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-menu a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-family: 'Playfair Display', Georgia, serif;
+  transition: color var(--transition-fast);
+}
+
+.mobile-menu a:hover {
+  color: var(--gold);
+}
+
+/* =============================================================================
+   6. HERO
+   ============================================================================= */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 6rem 1.5rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 8, 8, 0.75) 0%,
+    rgba(8, 8, 8, 0.55) 50%,
+    rgba(8, 8, 8, 0.85) 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.hero-badge-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.hero-badge-text {
+  color: var(--accent);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-size: clamp(2.8rem, 12vw, 5.5rem);
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--text-primary);
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  font-weight: 400;
+  margin-bottom: 0.8rem;
+}
+
+.hero-title em {
+  color: #ffffff;
+  font-style: italic;
+}
+
+.hero-subtitle {
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.hero-address {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 2.5rem;
+}
+
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  max-width: 260px;
+}
+
+/* Scroll indicator animato */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.scroll-indicator span {
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 35px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  animation: scrollLine 1.5s ease-in-out infinite;
+}
+
+/* =============================================================================
+   7. SEZIONE MENU
+   ============================================================================= */
+.menu-section {
+  background: var(--dark-2);
+  padding: var(--section-padding);
+  min-height: 100vh;
+}
+
+.menu-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: var(--dark-5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.menu-card .card-3d {
+  flex-shrink: 0;
+  width: 140px;
+  height: 140px;
+}
+
+.menu-card .card-3d canvas {
+  display: block;
+}
+
+.menu-card .card-placeholder {
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--dark-5);
+  border-radius: 4px;
+  font-size: 2rem;
+}
+
+.menu-card .card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.menu-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.menu-card .card-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.menu-card .card-price {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.menu-card .card-desc {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+}
+
+.menu-card .card-meta {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.menu-card .card-orario {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+   8. SEZIONE COCKTAIL
+   ============================================================================= */
+.cocktail-section {
+  background: var(--dark-3);
+  padding: var(--section-padding);
+  min-height: 80vh;
+}
+
+.cocktail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: var(--dark-5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Card per Gin Premium — mostra le due opzioni Lemon/Tonica */
+.gin-card {
+  background: var(--dark-3);
+  padding: 1.4rem 1.5rem;
+  transition: background var(--transition-fast);
+}
+
+.gin-card:hover {
+  background: var(--dark-4);
+}
+
+.gin-card .gin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.gin-card .gin-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.gin-card .gin-nota {
+  color: var(--gold-dim);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.gin-card .gin-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.gin-card .gin-option {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  background: rgba(201, 168, 76, 0.06);
+  border: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: 4px;
+}
+
+.gin-card .gin-option-label {
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+
+.gin-card .gin-option-price {
+  color: var(--gold);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.9rem;
+}
+
+/* Card per cocktail classici (senza opzioni) */
+.cocktail-card {
+  background: var(--dark-3);
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background var(--transition-fast);
+}
+
+.cocktail-card:hover {
+  background: var(--dark-4);
+}
+
+.cocktail-card .cocktail-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.cocktail-card .cocktail-varianti {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  margin-top: 0.15rem;
+}
+
+.cocktail-card .cocktail-price {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
+  color: var(--gold);
+}
+
+/* =============================================================================
+   9. SEZIONE BEVANDE
+   ============================================================================= */
+.bevande-section {
+  background: var(--dark-2);
+  padding: var(--section-padding);
+}
+
+.bevande-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: var(--dark-5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bevanda-card {
+  background: var(--dark-2);
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background var(--transition-fast);
+}
+
+.bevanda-card:hover {
+  background: var(--dark-4);
+}
+
+.bevanda-card .bevanda-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.bevanda-card .bevanda-nota {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+
+.bevanda-card .bevanda-price {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+
+/* =============================================================================
+   10. SEZIONE CONTATTI
+   ============================================================================= */
+.contatti-section {
+  background: var(--dark-3);
+  padding: var(--section-padding);
+}
+
+.contatti-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.contatti-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contatti-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.contatti-item-label {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.contatti-item-value {
+  color: var(--text-primary);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
+}
+
+.contatti-map {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--dark-5);
+  min-height: 300px;
+}
+
+.contatti-map iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  border: none;
+  filter: grayscale(0.5) brightness(0.8) contrast(1.1);
+  transition: filter var(--transition-normal);
+}
+
+.contatti-map:hover iframe {
+  filter: grayscale(0) brightness(1) contrast(1);
+}
+
+.btn-review {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 6px;
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-review:hover {
+  background: rgba(201, 168, 76, 0.2);
+  border-color: var(--gold);
+  box-shadow: var(--glow-gold);
+}
+
+/* =============================================================================
+   11. FOOTER
+   ============================================================================= */
+.site-footer {
+  background: var(--dark-1);
+  padding: 3rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--dark-5);
+}
+
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-brand {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.footer-tagline {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--gold);
+}
+
+.footer-copyright {
+  width: 100%;
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid var(--dark-5);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+/* =============================================================================
+   12. COOKIE BANNER
+   ============================================================================= */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: rgba(10, 10, 10, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--dark-5);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  animation: slideUp 0.5s var(--ease-out);
+}
+
+.cookie-text {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.cookie-text a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.cookie-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast);
+  font-family: inherit;
+}
+
+.cookie-btn.accept {
+  background: var(--gold);
+  color: var(--dark-2);
+}
+
+.cookie-btn.accept:hover {
+  background: var(--gold-light);
+}
+
+.cookie-btn.decline {
+  background: transparent;
+  border: 1px solid var(--dark-5);
+  color: var(--text-secondary);
+}
+
+.cookie-btn.decline:hover {
+  border-color: var(--text-secondary);
+}
+
+/* =============================================================================
+   13. ANIMAZIONI
+   ============================================================================= */
+
+/* Scroll indicator nell'hero */
+@keyframes scrollLine {
+  0% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+  100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+}
+
+/* Shimmer per skeleton loader */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Cookie banner slide up */
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* =============================================================================
+   14. RESPONSIVE
+   ============================================================================= */
+
+/* Tablet e sotto */
+@media (max-width: 768px) {
+  /* Navbar: nasconde i link, mostra hamburger */
+  .navbar-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  /* Contatti: griglia a colonna singola */
+  .contatti-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Menu card: layout verticale */
+  .menu-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-card .card-3d {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .menu-card .card-3d canvas {
+    width: 180px !important;
+    height: 180px !important;
+  }
+
+  /* Cookie banner: verticale su mobile */
+  .cookie-banner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Footer: layout verticale */
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Gin options: colonna su mobile */
+  .gin-card .gin-options {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile piccolo */
+@media (max-width: 480px) {
+  :root {
+    --section-padding: 3rem 1rem;
+  }
+  
+  .hero {
+    padding: 5rem 1rem 2rem;
+  }
+}
