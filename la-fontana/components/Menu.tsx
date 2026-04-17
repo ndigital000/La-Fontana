@@ -71,15 +71,18 @@ const FALLBACK_CATEGORIE = ['Panini', 'Carne', 'Aperitivo'];
 
 // Flag globale: Three.js viene caricato una sola volta anche se ci sono più modelli
 let threeLoaded = false;
+let threeLoadPromise: Promise<void> | null = null;
 
 /**
  * Carica le librerie Three.js, DRACOLoader e GLTFLoader da CDN.
  * Usa script tag iniettati nel DOM (non import ES6) perché queste
  * librerie sono pesanti e vogliamo caricarle solo quando servono.
+ * Deduplicato: chiamate concorrenti riutilizzano la stessa Promise.
  */
 function loadThree(): Promise<void> {
   if (threeLoaded) return Promise.resolve();
-  return new Promise((resolve) => {
+  if (threeLoadPromise) return threeLoadPromise;
+  threeLoadPromise = new Promise((resolve) => {
     // 1. Carica Three.js core
     const s1 = document.createElement('script');
     s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
@@ -98,6 +101,7 @@ function loadThree(): Promise<void> {
     };
     document.head.appendChild(s1);
   });
+  return threeLoadPromise;
 }
 
 /**
@@ -140,11 +144,20 @@ function Model3D({ glbPath }: { glbPath: string }) {
 
       // === RENDERER ===
       // alpha: true = sfondo trasparente (il canvas non ha sfondo proprio)
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      // antialias: false e pixelRatio: 1 per massima stabilità su mobile
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: false,
+        alpha: true,
+        powerPreference: 'low-power'
+      });
       renderer.setSize(140, 140);
-      // Limita il pixel ratio a 1.5 su mobile per risparmiare GPU
-      // Su desktop retina sarebbe 2, ma per un'anteprima 140px non serve
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.setPixelRatio(1); // FISSO a 1, mai devicePixelRatio
+
+      // Controllo preventivo: se il contesto WebGL non è disponibile, esci
+      const ctx = renderer.getContext();
+      if (!ctx) { renderer.dispose(); return; }
+
       renderer.outputEncoding = THREE.sRGBEncoding;
 
       // === SCENA ===
@@ -210,8 +223,8 @@ function Model3D({ glbPath }: { glbPath: string }) {
     // Quando il componente si smonta (es. cambio categoria), libera le risorse
     return () => {
       cancelAnimationFrame(animId);
-      renderer?.dispose();
       observer.disconnect();
+      renderer?.dispose();
     };
   }, [glbPath]);
 
@@ -219,6 +232,65 @@ function Model3D({ glbPath }: { glbPath: string }) {
     <div ref={containerRef} className="card-3d">
       <canvas ref={canvasRef} width={140} height={140} />
     </div>
+  );
+}
+
+// =============================================================================
+// COMPONENTE Placeholder3D — Emoji placeholder quando il modello non è ancora visibile
+// =============================================================================
+function Placeholder3D() {
+  return (
+    <div className="card-placeholder">🍽️</div>
+  );
+}
+
+// =============================================================================
+// COMPONENTE PiattoCard — Monta Model3D SOLO quando la card è visibile
+// Usa IntersectionObserver per lazy-mount: evita di creare renderer WebGL
+// per card fuori dal viewport → previene crash su mobile
+// =============================================================================
+function PiattoCard({ piatto, variants }: { piatto: Piatto; variants: any }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [visibile, setVisibile] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisibile(true); },
+      { threshold: 0.2 }
+    );
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className="menu-card"
+      variants={variants}
+      whileHover={{ scale: 1.01 }}
+      transition={{ type: 'spring', stiffness: 300 }}
+    >
+      {/* Modello 3D o placeholder emoji */}
+      <div style={{ flexShrink: 0, width: 140, height: 140 }}>
+        {visibile && piatto.glb
+          ? <Model3D glbPath={piatto.glb} />
+          : <Placeholder3D />
+        }
+      </div>
+
+      {/* Informazioni del piatto */}
+      <div className="card-info">
+        <div className="card-header">
+          <h3 className="card-name">{piatto.nome}</h3>
+          <span className="card-price">€{parseFloat(piatto.prezzo).toFixed(0)}</span>
+        </div>
+        <p className="card-desc">{piatto.descrizione}</p>
+        <div className="card-meta">
+          {piatto.tag && <span className="badge">{piatto.tag}</span>}
+          {piatto.orario && <span className="card-orario">🕐 {piatto.orario}</span>}
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -356,6 +428,7 @@ export default function Menu() {
         <MenuSkeleton />
       ) : (
         <motion.div
+          key={attiva}
           className="menu-list"
           variants={containerVariants}
           initial="hidden"
@@ -363,33 +436,7 @@ export default function Menu() {
           viewport={{ once: true, margin: '-50px' }}
         >
           {filtrati.map(piatto => (
-            <motion.div
-              key={piatto.id}
-              className="menu-card"
-              variants={itemVariants}
-              whileHover={{ scale: 1.01 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-            >
-              {/* Modello 3D o placeholder emoji */}
-              {piatto.glb ? (
-                <Model3D glbPath={piatto.glb} />
-              ) : (
-                <div className="card-placeholder">🍽️</div>
-              )}
-
-              {/* Informazioni del piatto */}
-              <div className="card-info">
-                <div className="card-header">
-                  <h3 className="card-name">{piatto.nome}</h3>
-                  <span className="card-price">€{parseFloat(piatto.prezzo).toFixed(0)}</span>
-                </div>
-                <p className="card-desc">{piatto.descrizione}</p>
-                <div className="card-meta">
-                  {piatto.tag && <span className="badge">{piatto.tag}</span>}
-                  {piatto.orario && <span className="card-orario">🕐 {piatto.orario}</span>}
-                </div>
-              </div>
-            </motion.div>
+            <PiattoCard key={piatto.id} piatto={piatto} variants={itemVariants} />
           ))}
         </motion.div>
       )}
