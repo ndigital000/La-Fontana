@@ -66,7 +66,7 @@ export default function Contatti() {
           {/* Orari */}
           <div className="contatti-item">
             <span className="contatti-item-label">🕐 Orari</span>
-            <span className="contatti-item-value">18:00 — 02:00</span>
+            <span className="contatti-item-value">15:00 — 02:00</span>
             <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
               Aperto tutti i giorni in stagione
             </span>

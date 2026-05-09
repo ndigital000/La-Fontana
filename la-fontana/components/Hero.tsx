@@ -39,18 +39,7 @@ export default function Hero() {
       {/* ========= LIVELLO 3: Contenuto principale ========= */}
       <div className="hero-content">
 
-        {/* Badge — "Cocktail Bar & Cucina · Strongoli Marina" */}
-        <motion.div
-          className="hero-badge"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          <span className="hero-badge-dot" />
-          <span className="hero-badge-text">
-            Cocktail Bar &amp; Cucina · Strongoli Marina
-          </span>
-        </motion.div>
+
 
         {/* Titolo principale — "La Fontana" */}
         <motion.h1

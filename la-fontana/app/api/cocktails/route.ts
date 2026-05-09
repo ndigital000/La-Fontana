@@ -44,7 +44,7 @@ export async function GET() {
         c.ordine
     `;
 
-    const datiPuliti = sanitizeRows(cocktail);
+    const datiPuliti = cocktail;
 
     // Estrai le sezioni uniche mantenendo l'ordine
     const sezioni = [...new Set(datiPuliti.map((c: Record<string, unknown>) => c.sezione as string))];
