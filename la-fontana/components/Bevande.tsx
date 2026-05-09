@@ -22,22 +22,30 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 // Tipo TypeScript per una bevanda
+
 interface Bevanda {
   id: number;
   nome: string;
   prezzo: string;
   nota: string | null;
+  categorie_cocktail: string;
 }
 
 // Dati di fallback se il database non risponde
 const FALLBACK: Bevanda[] = [
-  { id: 1, nome: 'Nastro Azzurro', prezzo: '4.00', nota: '33cl' },
-  { id: 2, nome: 'Heineken', prezzo: '4.00', nota: '33cl' },
-  { id: 3, nome: 'Bud', prezzo: '4.00', nota: '33cl' },
-  { id: 4, nome: 'Bjorne / Ceres', prezzo: '5.00', nota: '33cl' },
-  { id: 5, nome: 'Bibite analcoliche', prezzo: '3.00', nota: 'Coca Cola · Fanta · Sprite' },
-  { id: 6, nome: 'Acqua Minerale', prezzo: '2.00', nota: '50cl' },
+  { id: 1, nome: 'Nastro Azzurro',     prezzo: '4.00', nota: '33cl',                       categorie_cocktail: 'Birre' },
+  { id: 2, nome: 'Heineken',           prezzo: '4.00', nota: '33cl',                       categorie_cocktail: 'Birre' },
+  { id: 3, nome: 'Bud',               prezzo: '4.00', nota: '33cl',                       categorie_cocktail: 'Birre' },
+  { id: 4, nome: 'Bjorne / Ceres',    prezzo: '5.00', nota: '33cl',                       categorie_cocktail: 'Birre' },
+  { id: 5, nome: 'Bibite analcoliche', prezzo: '3.00', nota: 'Coca Cola · Fanta · Sprite', categorie_cocktail: 'Analcoliche' },
+  { id: 6, nome: 'Acqua Minerale',    prezzo: '2.00', nota: '50cl',                       categorie_cocktail: 'Analcoliche' },
+  { id: 7, nome: 'Amaro del Capo',    prezzo: '4.00', nota: null,                         categorie_cocktail: 'Amari' },
+  { id: 8, nome: 'Jägermeister',      prezzo: '4.00', nota: null,                         categorie_cocktail: 'Amari' },
+  { id: 9, nome: 'Brancamenta',       prezzo: '4.00', nota: null,                         categorie_cocktail: 'Amari' },
+  { id:10, nome: 'Amaro di Strongoli',prezzo: '4.00', nota: null,                         categorie_cocktail: 'Amari' },
+  { id:11, nome: 'Fernet Branca',     prezzo: '4.00', nota: null,                         categorie_cocktail: 'Amari' },
 ];
+const CATEGORIE = ['Birre', 'Analcoliche', 'Amari'];
 
 // Skeleton loader durante il caricamento
 function BevandeSkeleton() {
@@ -57,11 +65,11 @@ function BevandeSkeleton() {
 }
 
 export default function Bevande() {
-  const [bevande, setBevande] = useState<Bevanda[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [errore, setErrore] = useState('');
+  const [bevande,  setBevande]  = useState<Bevanda[]>([]);
+  const [attiva,   setAttiva]   = useState('Birre');
+  const [loading,  setLoading]  = useState(true);
+  const [errore,   setErrore]   = useState('');
 
-  // Fetch dati dall'API
   useEffect(() => {
     async function caricaBevande() {
       try {
@@ -81,21 +89,23 @@ export default function Bevande() {
     caricaBevande();
   }, []);
 
-  // Varianti animazione stagger
+  const filtrate = bevande.filter(b => b.categorie_cocktail === attiva);
+
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden:  { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
   };
   const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
+    hidden:  { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
 
   return (
     <section id="sez-bevande" className="bevande-section">
-      {/* Titolo sezione */}
+
+      {/* TITOLO */}
       <motion.div
-        style={{ textAlign: 'center', marginBottom: '3rem' }}
+        style={{ textAlign: 'center', marginBottom: '2.5rem' }}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
@@ -103,30 +113,44 @@ export default function Bevande() {
       >
         <p className="section-label">— Per rinfrescarsi —</p>
         <h2 className="section-title">
-          Birre &amp; <em>Soft Drinks</em>
+          Birre & <em>Soft Drinks</em>
         </h2>
         <div className="divider" />
       </motion.div>
 
-      {/* Avviso offline */}
+      {/* TAB CATEGORIE */}
+      <div className="menu-tabs">
+        {CATEGORIE.map(cat => (
+          <button
+            key={cat}
+            onClick={() => setAttiva(cat)}
+            className={`tab-btn ${attiva === cat ? 'active' : ''}`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* AVVISO OFFLINE */}
       {errore && (
         <p style={{ textAlign: 'center', color: 'var(--gold-dim)', fontSize: '0.72rem', marginBottom: '1rem' }}>
           ⚠ {errore}
         </p>
       )}
 
-      {/* Lista bevande (con skeleton durante il loading) */}
+      {/* LISTA */}
       {loading ? (
         <BevandeSkeleton />
       ) : (
         <motion.div
+          key={attiva}
           className="bevande-list"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >
-          {bevande.map(b => (
+          {filtrate.map(b => (
             <motion.div
               key={b.id}
               className="bevanda-card"
@@ -142,6 +166,9 @@ export default function Bevande() {
           ))}
         </motion.div>
       )}
+
+      <div className="section-divider" />
+
     </section>
   );
 }

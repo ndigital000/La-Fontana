@@ -2,62 +2,34 @@
  * =============================================================================
  * GLOBALS.CSS — Design System "Luxury Dark" per La Fontana
  * =============================================================================
- * 
- * STRUTTURA DEL FILE:
- * 1. Import Tailwind (utility di base)
- * 2. CSS Variables (colori, font, spacing — il "cervello" del design)
- * 3. Reset e base styles
- * 4. Tipografia
- * 5. Componenti riutilizzabili (bottoni, card, badge, skeleton)
- * 6. Sezioni specifiche (navbar, hero, menu, cocktail, bevande, contatti, footer)
- * 7. Cookie Banner
- * 8. Animazioni (@keyframes)
- * 9. Responsive (media queries)
- * 
- * PER MODIFICARE I COLORI:
- * Cambia SOLO le variabili in :root — tutti i componenti si aggiorneranno
- * =============================================================================
  */
 
 @import "tailwindcss";
 
 /* =============================================================================
-   1. CSS VARIABLES — Il "cervello" del design
-   Cambiando questi valori cambi l'intero aspetto del sito
+   CSS VARIABLES
    ============================================================================= */
 :root {
-  /* --- Colori principali --- */
-  --gold: #C9A84C;              /* Oro — accento principale (bottoni, hover, dettagli) */
-  --gold-light: #D4B85A;        /* Oro chiaro — hover dell'oro */
-  --gold-dim: #A08535;          /* Oro scuro — bordi sottili */
-  
-  --accent: #C8C0B8;            /* Beige caldo — testi secondari eleganti */
-  --accent-light: #E0D8D0;      /* Beige chiaro — sottotitoli */
-  
-  /* --- Sfondi dark (dal più scuro al più chiaro) --- */
-  --dark-1: #050505;            /* Sfondo più scuro — footer */
-  --dark-2: #080808;            /* Sfondo base — body */
-  --dark-3: #0A0A0A;            /* Sfondo sezioni alternate */
-  --dark-4: #111111;            /* Card background */
-  --dark-5: #1A1A1A;            /* Bordi, separatori */
-  --dark-6: #222222;            /* Hover card */
-  
-  /* --- Testi --- */
-  --text-primary: #F0EDE8;      /* Testo principale — quasi bianco caldo */
-  --text-secondary: #9A9590;    /* Testo secondario — grigio medio */
-  --text-muted: #555555;        /* Testo molto attenuato — label, note */
-  --text-dark: #333333;         /* Testo su sfondi chiari */
-  
-  /* --- Effetti --- */
-  --glass-bg: rgba(255, 255, 255, 0.03);   /* Sfondo vetro */
-  --glass-border: rgba(255, 255, 255, 0.08); /* Bordo vetro */
-  --glow-gold: 0 0 20px rgba(201, 168, 76, 0.15); /* Bagliore dorato */
-  
-  /* --- Spacing --- */
+  --gold: #C9A84C;
+  --gold-light: #D4B85A;
+  --gold-dim: #A08535;
+  --accent: #C8C0B8;
+  --accent-light: #E0D8D0;
+  --dark-1: #050505;
+  --dark-2: #080808;
+  --dark-3: #0A0A0A;
+  --dark-4: #111111;
+  --dark-5: #1A1A1A;
+  --dark-6: #222222;
+  --text-primary: #F0EDE8;
+  --text-secondary: #9A9590;
+  --text-muted: #555555;
+  --text-dark: #333333;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glow-gold: 0 0 20px rgba(201, 168, 76, 0.15);
   --section-padding: 5rem 1.5rem;
   --max-width: 800px;
-  
-  /* --- Transizioni --- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 0.2s var(--ease-out);
   --transition-normal: 0.4s var(--ease-out);
@@ -65,7 +37,7 @@
 }
 
 /* =============================================================================
-   2. RESET E BASE
+   RESET E BASE
    ============================================================================= */
 * {
   margin: 0;
@@ -75,7 +47,6 @@
 
 html {
   scroll-behavior: smooth;
-  /* Previene il "layout shift" quando appare la scrollbar */
   scrollbar-gutter: stable;
 }
 
@@ -90,15 +61,12 @@ body {
 }
 
 /* =============================================================================
-   3. TIPOGRAFIA
+   TIPOGRAFIA
    ============================================================================= */
-
-/* Font serif per titoli — eleganza "luxury" */
 .font-display {
   font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 
-/* Titoli delle sezioni */
 .section-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(2rem, 8vw, 3.5rem);
@@ -112,7 +80,6 @@ body {
   color: var(--accent);
 }
 
-/* Label piccole sopra i titoli (— Da mangiare —) */
 .section-label {
   color: var(--text-muted);
   font-size: 0.65rem;
@@ -122,10 +89,8 @@ body {
 }
 
 /* =============================================================================
-   4. COMPONENTI RIUTILIZZABILI
+   COMPONENTI RIUTILIZZABILI
    ============================================================================= */
-
-/* --- Bottone primario (sfondo pieno) --- */
 .btn-primary {
   display: inline-block;
   padding: 0.9rem 2rem;
@@ -148,7 +113,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* --- Bottone secondario (bordo) --- */
 .btn-outline {
   display: inline-block;
   padding: 0.9rem 2rem;
@@ -171,7 +135,9 @@ body {
   box-shadow: var(--glow-gold);
 }
 
-/* --- Tab/Filtro (per categorie menu/cocktail) --- */
+/* ── Tab/Filtro ──
+   FIX: aggiunto text-decoration: none e color esplicito
+   per evitare che il browser colori i tag <a> in blu di default */
 .tab-btn {
   padding: 0.5rem 1.2rem;
   background: transparent;
@@ -185,11 +151,14 @@ body {
   cursor: pointer;
   transition: all var(--transition-fast);
   font-family: inherit;
+  text-decoration: none;        /* FIX: rimuove sottolineatura browser sui <a> */
+  -webkit-text-decoration: none;
 }
 
 .tab-btn:hover {
   opacity: 1;
   border-color: var(--gold-dim);
+  color: var(--text-primary);   /* FIX: forza colore anche sull'hover */
 }
 
 .tab-btn.active {
@@ -199,7 +168,7 @@ body {
   border-color: var(--text-primary);
 }
 
-/* --- Card di un item (piatto, cocktail, bevanda) --- */
+/* ── Card item (piatto, cocktail, bevanda) ── */
 .menu-card {
   background: var(--dark-2);
   padding: 1.5rem;
@@ -213,7 +182,6 @@ body {
   background: var(--dark-4);
 }
 
-/* --- Separatore decorativo --- */
 .divider {
   width: 40px;
   height: 1px;
@@ -221,7 +189,6 @@ body {
   margin: 1rem auto;
 }
 
-/* --- Badge (es. "Best Seller") --- */
 .badge {
   display: inline-block;
   padding: 0.2rem 0.6rem;
@@ -234,7 +201,6 @@ body {
   border: 1px solid rgba(201, 168, 76, 0.2);
 }
 
-/* --- Skeleton loader (rettangolo animato durante il caricamento) --- */
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -252,21 +218,12 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.skeleton-text.short {
-  width: 60%;
-}
-
-.skeleton-text.medium {
-  width: 80%;
-}
-
-.skeleton-card {
-  height: 80px;
-  margin-bottom: 1px;
-}
+.skeleton-text.short  { width: 60%; }
+.skeleton-text.medium { width: 80%; }
+.skeleton-card        { height: 80px; margin-bottom: 1px; }
 
 /* =============================================================================
-   5. NAVBAR
+   NAVBAR
    ============================================================================= */
 .navbar {
   position: fixed;
@@ -323,15 +280,9 @@ body {
   transition: width var(--transition-fast);
 }
 
-.navbar-link:hover {
-  color: var(--gold);
-}
+.navbar-link:hover        { color: var(--gold); }
+.navbar-link:hover::after { width: 100%; }
 
-.navbar-link:hover::after {
-  width: 100%;
-}
-
-/* Hamburger menu (mobile) */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -350,26 +301,14 @@ body {
   transition: all 0.3s ease;
 }
 
-.hamburger.open span:first-child {
-  transform: rotate(45deg) translate(4px, 4px);
-}
+.hamburger.open span:first-child  { transform: rotate(45deg) translate(4px, 4px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:last-child   { transform: rotate(-45deg) translate(5px, -5px); }
 
-.hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.open span:last-child {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Mobile menu overlay */
 .mobile-menu {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(5, 5, 5, 0.98);
   z-index: 99;
   flex-direction: column;
@@ -378,9 +317,7 @@ body {
   gap: 2rem;
 }
 
-.mobile-menu.open {
-  display: flex;
-}
+.mobile-menu.open { display: flex; }
 
 .mobile-menu a {
   color: var(--text-primary);
@@ -392,12 +329,10 @@ body {
   transition: color var(--transition-fast);
 }
 
-.mobile-menu a:hover {
-  color: var(--gold);
-}
+.mobile-menu a:hover { color: var(--gold); }
 
 /* =============================================================================
-   6. HERO
+   HERO
    ============================================================================= */
 .hero {
   min-height: 100svh;
@@ -452,19 +387,8 @@ body {
   margin-bottom: 2rem;
 }
 
-.hero-badge-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--gold);
-}
-
-.hero-badge-text {
-  color: var(--accent);
-  font-size: 0.65rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-}
+.hero-badge-dot  { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+.hero-badge-text { color: var(--accent); font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; }
 
 .hero-title {
   font-size: clamp(2.8rem, 12vw, 5.5rem);
@@ -476,35 +400,11 @@ body {
   margin-bottom: 0.8rem;
 }
 
-.hero-title em {
-  color: #ffffff;
-  font-style: italic;
-}
+.hero-title em    { color: #ffffff; font-style: italic; }
+.hero-subtitle    { color: var(--accent); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.hero-address     { color: var(--text-muted); font-size: 0.7rem; letter-spacing: 0.15em; margin-bottom: 2.5rem; }
+.hero-cta         { display: flex; flex-direction: column; gap: 0.7rem; width: 100%; max-width: 260px; }
 
-.hero-subtitle {
-  color: var(--accent);
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-
-.hero-address {
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  margin-bottom: 2.5rem;
-}
-
-.hero-cta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  width: 100%;
-  max-width: 260px;
-}
-
-/* Scroll indicator animato */
 .scroll-indicator {
   position: absolute;
   bottom: 2rem;
@@ -515,12 +415,7 @@ body {
   gap: 0.4rem;
 }
 
-.scroll-indicator span {
-  color: var(--text-muted);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
+.scroll-indicator span { color: var(--text-muted); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; }
 
 .scroll-line {
   width: 1px;
@@ -530,7 +425,7 @@ body {
 }
 
 /* =============================================================================
-   7. SEZIONE MENU
+   SEZIONE MENU
    ============================================================================= */
 .menu-section {
   background: var(--dark-2);
@@ -557,76 +452,24 @@ body {
   overflow: hidden;
 }
 
-.menu-card .card-3d {
-  flex-shrink: 0;
-  width: 140px;
-  height: 140px;
+/* Separatore decorativo tra sezioni */
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  margin: 4rem auto 0;
 }
 
-.menu-card .card-3d canvas {
-  display: block;
-}
-
-.menu-card .card-placeholder {
-  width: 140px;
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--dark-5);
-  border-radius: 4px;
-  font-size: 2rem;
-}
-
-.menu-card .card-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.menu-card .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 0.3rem;
-}
-
-.menu-card .card-name {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.1rem;
-  color: var(--text-primary);
-  font-weight: 400;
-}
-
-.menu-card .card-price {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.1rem;
-  color: var(--gold);
-  white-space: nowrap;
-}
-
-.menu-card .card-desc {
-  color: var(--text-secondary);
-  font-size: 0.78rem;
-  line-height: 1.5;
-  margin-bottom: 0.4rem;
-}
-
-.menu-card .card-meta {
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.menu-card .card-orario {
-  color: var(--text-muted);
-  font-size: 0.65rem;
-  letter-spacing: 0.05em;
-}
+.menu-card .card-info         { flex: 1; min-width: 0; }
+.menu-card .card-header       { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-bottom: 0.3rem; }
+.menu-card .card-name         { font-family: 'Playfair Display', Georgia, serif; font-size: 1.1rem; color: var(--text-primary); font-weight: 400; }
+.menu-card .card-price        { font-family: 'Playfair Display', Georgia, serif; font-size: 1.1rem; color: var(--gold); white-space: nowrap; }
+.menu-card .card-desc         { color: var(--text-secondary); font-size: 0.78rem; line-height: 1.5; margin-bottom: 0.4rem; }
+.menu-card .card-meta         { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+.menu-card .card-orario       { color: var(--text-muted); font-size: 0.65rem; letter-spacing: 0.05em; }
 
 /* =============================================================================
-   8. SEZIONE COCKTAIL
+   SEZIONE COCKTAIL
    ============================================================================= */
 .cocktail-section {
   background: var(--dark-3);
@@ -645,64 +488,21 @@ body {
   overflow: hidden;
 }
 
-/* Card per Gin Premium — mostra le due opzioni Lemon/Tonica */
 .gin-card {
   background: var(--dark-3);
   padding: 1.4rem 1.5rem;
   transition: background var(--transition-fast);
 }
 
-.gin-card:hover {
-  background: var(--dark-4);
-}
+.gin-card:hover                { background: var(--dark-4); }
+.gin-card .gin-header          { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+.gin-card .gin-name            { font-family: 'Playfair Display', Georgia, serif; font-size: 1.1rem; color: var(--text-primary); }
+.gin-card .gin-nota            { color: var(--gold-dim); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.gin-card .gin-options         { display: flex; gap: 1rem; }
+.gin-card .gin-option          { display: flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.7rem; background: rgba(201, 168, 76, 0.06); border: 1px solid rgba(201, 168, 76, 0.12); border-radius: 4px; }
+.gin-card .gin-option-label    { color: var(--text-secondary); font-size: 0.72rem; }
+.gin-card .gin-option-price    { color: var(--gold); font-family: 'Playfair Display', Georgia, serif; font-size: 0.9rem; }
 
-.gin-card .gin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.6rem;
-}
-
-.gin-card .gin-name {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.1rem;
-  color: var(--text-primary);
-}
-
-.gin-card .gin-nota {
-  color: var(--gold-dim);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.gin-card .gin-options {
-  display: flex;
-  gap: 1rem;
-}
-
-.gin-card .gin-option {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.7rem;
-  background: rgba(201, 168, 76, 0.06);
-  border: 1px solid rgba(201, 168, 76, 0.12);
-  border-radius: 4px;
-}
-
-.gin-card .gin-option-label {
-  color: var(--text-secondary);
-  font-size: 0.72rem;
-}
-
-.gin-card .gin-option-price {
-  color: var(--gold);
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 0.9rem;
-}
-
-/* Card per cocktail classici (senza opzioni) */
 .cocktail-card {
   background: var(--dark-3);
   padding: 1.4rem 1.5rem;
@@ -712,30 +512,13 @@ body {
   transition: background var(--transition-fast);
 }
 
-.cocktail-card:hover {
-  background: var(--dark-4);
-}
-
-.cocktail-card .cocktail-name {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1rem;
-  color: var(--text-primary);
-}
-
-.cocktail-card .cocktail-varianti {
-  color: var(--text-muted);
-  font-size: 0.7rem;
-  margin-top: 0.15rem;
-}
-
-.cocktail-card .cocktail-price {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1rem;
-  color: var(--gold);
-}
+.cocktail-card:hover              { background: var(--dark-4); }
+.cocktail-card .cocktail-name     { font-family: 'Playfair Display', Georgia, serif; font-size: 1rem; color: var(--text-primary); }
+.cocktail-card .cocktail-varianti { color: var(--text-muted); font-size: 0.7rem; margin-top: 0.15rem; }
+.cocktail-card .cocktail-price    { font-family: 'Playfair Display', Georgia, serif; font-size: 1rem; color: var(--gold); }
 
 /* =============================================================================
-   9. SEZIONE BEVANDE
+   SEZIONE BEVANDE
    ============================================================================= */
 .bevande-section {
   background: var(--dark-2);
@@ -762,31 +545,13 @@ body {
   transition: background var(--transition-fast);
 }
 
-.bevanda-card:hover {
-  background: var(--dark-4);
-}
-
-.bevanda-card .bevanda-name {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.1rem;
-  color: var(--text-primary);
-}
-
-.bevanda-card .bevanda-nota {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  margin-top: 0.15rem;
-}
-
-.bevanda-card .bevanda-price {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.1rem;
-  color: var(--gold);
-}
+.bevanda-card:hover             { background: var(--dark-4); }
+.bevanda-card .bevanda-name     { font-family: 'Playfair Display', Georgia, serif; font-size: 1.1rem; color: var(--text-primary); }
+.bevanda-card .bevanda-nota     { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.15rem; }
+.bevanda-card .bevanda-price    { font-family: 'Playfair Display', Georgia, serif; font-size: 1.1rem; color: var(--gold); }
 
 /* =============================================================================
-   10. SEZIONE CONTATTI
+   SEZIONE CONTATTI
    ============================================================================= */
 .contatti-section {
   background: var(--dark-3);
@@ -801,30 +566,10 @@ body {
   margin: 0 auto;
 }
 
-.contatti-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.contatti-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.contatti-item-label {
-  color: var(--text-muted);
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.contatti-item-value {
-  color: var(--text-primary);
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1rem;
-}
+.contatti-info            { display: flex; flex-direction: column; gap: 1.5rem; }
+.contatti-item            { display: flex; flex-direction: column; gap: 0.3rem; }
+.contatti-item-label      { color: var(--text-muted); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; }
+.contatti-item-value      { color: var(--text-primary); font-family: 'Playfair Display', Georgia, serif; font-size: 1rem; }
 
 .contatti-map {
   border-radius: 8px;
@@ -842,9 +587,7 @@ body {
   transition: filter var(--transition-normal);
 }
 
-.contatti-map:hover iframe {
-  filter: grayscale(0) brightness(1) contrast(1);
-}
+.contatti-map:hover iframe { filter: grayscale(0) brightness(1) contrast(1); }
 
 .btn-review {
   display: inline-flex;
@@ -870,7 +613,7 @@ body {
 }
 
 /* =============================================================================
-   11. FOOTER
+   FOOTER
    ============================================================================= */
 .site-footer {
   background: var(--dark-1);
@@ -888,25 +631,10 @@ body {
   flex-wrap: wrap;
 }
 
-.footer-brand {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.2rem;
-  color: var(--gold);
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-}
+.footer-brand   { font-family: 'Playfair Display', Georgia, serif; font-size: 1.2rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+.footer-tagline { color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.1em; }
 
-.footer-tagline {
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-}
-
-.footer-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-}
+.footer-links   { display: flex; gap: 1.5rem; list-style: none; }
 
 .footer-links a {
   color: var(--text-secondary);
@@ -917,9 +645,7 @@ body {
   transition: color var(--transition-fast);
 }
 
-.footer-links a:hover {
-  color: var(--gold);
-}
+.footer-links a:hover { color: var(--gold); }
 
 .footer-copyright {
   width: 100%;
@@ -933,13 +659,11 @@ body {
 }
 
 /* =============================================================================
-   12. COOKIE BANNER
+   COOKIE BANNER
    ============================================================================= */
 .cookie-banner {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   z-index: 200;
   background: rgba(10, 10, 10, 0.97);
   backdrop-filter: blur(10px);
@@ -953,23 +677,9 @@ body {
   animation: slideUp 0.5s var(--ease-out);
 }
 
-.cookie-text {
-  color: var(--text-secondary);
-  font-size: 0.78rem;
-  line-height: 1.5;
-  flex: 1;
-}
-
-.cookie-text a {
-  color: var(--gold);
-  text-decoration: underline;
-}
-
-.cookie-buttons {
-  display: flex;
-  gap: 0.6rem;
-  flex-shrink: 0;
-}
+.cookie-text          { color: var(--text-secondary); font-size: 0.78rem; line-height: 1.5; flex: 1; }
+.cookie-text a        { color: var(--gold); text-decoration: underline; }
+.cookie-buttons       { display: flex; gap: 0.6rem; flex-shrink: 0; }
 
 .cookie-btn {
   padding: 0.5rem 1rem;
@@ -983,92 +693,62 @@ body {
   font-family: inherit;
 }
 
-.cookie-btn.accept {
-  background: var(--gold);
-  color: var(--dark-2);
-}
-
-.cookie-btn.accept:hover {
-  background: var(--gold-light);
-}
-
-.cookie-btn.decline {
-  background: transparent;
-  border: 1px solid var(--dark-5);
-  color: var(--text-secondary);
-}
-
-.cookie-btn.decline:hover {
-  border-color: var(--text-secondary);
-}
+.cookie-btn.accept          { background: var(--gold); color: var(--dark-2); }
+.cookie-btn.accept:hover    { background: var(--gold-light); }
+.cookie-btn.decline         { background: transparent; border: 1px solid var(--dark-5); color: var(--text-secondary); }
+.cookie-btn.decline:hover   { border-color: var(--text-secondary); }
 
 /* =============================================================================
-   13. ANIMAZIONI
+   ANIMAZIONI
    ============================================================================= */
-
-/* Scroll indicator nell'hero */
 @keyframes scrollLine {
-  0% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+  0%   { opacity: 1; transform: scaleY(1);   transform-origin: top; }
   100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
 }
 
-/* Shimmer per skeleton loader */
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
 }
 
-/* Cookie banner slide up */
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 /* =============================================================================
-   14. RESPONSIVE
+   RESPONSIVE
    ============================================================================= */
-
-/* Tablet e sotto */
 @media (max-width: 768px) {
-  /* Navbar: nasconde i link, mostra hamburger */
-  .navbar-links {
-    display: none;
-  }
+  .navbar-links  { display: none; }
+  .hamburger     { display: flex; }
+  .contatti-grid { grid-template-columns: 1fr; }
 
-  .hamburger {
-    display: flex;
-  }
-
-  /* Contatti: griglia a colonna singola */
-  .contatti-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* Menu card: layout verticale */
+  /* Card rimane orizzontale su mobile — foto piccola a sinistra, testo a destra */
   .menu-card {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .menu-card .card-header {
+     flex-direction: column;
+     align-items: flex-start;
+     gap: 0.2rem;
+  }
+  .menu-card .card-price {
+     font-size: 1rem;
   }
 
-  .menu-card .card-3d {
-    width: 100%;
-    height: 180px;
-    display: flex;
-    justify-content: center;
+  .menu-card .card-name {
+     font-size: 1rem;
   }
 
-  .menu-card .card-3d canvas {
-    width: 180px !important;
-    height: 180px !important;
-  }
-
-  /* Cookie banner: verticale su mobile */
   .cookie-banner {
     flex-direction: column;
     text-align: center;
   }
 
-  /* Footer: layout verticale */
   .footer-inner {
     flex-direction: column;
     text-align: center;
@@ -1080,20 +760,13 @@ body {
     justify-content: center;
   }
 
-  /* Gin options: colonna su mobile */
   .gin-card .gin-options {
     flex-direction: column;
     gap: 0.5rem;
   }
 }
 
-/* Mobile piccolo */
 @media (max-width: 480px) {
-  :root {
-    --section-padding: 3rem 1rem;
-  }
-  
-  .hero {
-    padding: 5rem 1rem 2rem;
-  }
+  :root { --section-padding: 3rem 1rem; }
+  .hero { padding: 5rem 1rem 2rem; }
 }
