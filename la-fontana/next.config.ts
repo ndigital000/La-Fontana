@@ -64,6 +64,20 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          {
+            // Content Security Policy — controlla quali risorse possono essere caricate
+            // unsafe-eval necessario per Three.js, unsafe-inline per stili Tailwind
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://images.unsplash.com",
+              "connect-src 'self' https://*.neon.tech",
+              "worker-src blob:",
+              "font-src 'self'",
+            ].join("; "),
+          },
         ],
       },
     ];

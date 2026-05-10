@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import sql from '@/lib/db';
+import { sanitizeRows } from '@/lib/sanitize';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,10 +20,12 @@ export async function GET() {
         ordine
     `;
 
-    return NextResponse.json({ bevande });
+    const datiPuliti = sanitizeRows(bevande);
+
+    return NextResponse.json({ bevande: datiPuliti });
 
   } catch (err) {
-    console.error('❌ Errore API /api/bevande:', err);
+    console.error('Errore API /api/bevande:', err);
     return NextResponse.json(
       { error: 'Impossibile caricare le bevande. Riprova tra poco.' },
       { status: 500 }

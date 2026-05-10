@@ -4,7 +4,7 @@
  * =============================================================================
  * Restituisce tutti i cocktail con i campi specifici per la logica Gin:
  * - sezione: "Gin Premium", "Gin Standard", "Cocktail"
- * - varianti: le opzioni disponibili (es. "Lemon · Tonica")
+ * - varianti: le opzioni disponibili (es. "Lemon / Tonica")
  * - prezzo_tonica: prezzo con acqua tonica
  * - nota: tipo di tonica/lemon (es. "Fever Tree")
  * 
@@ -44,7 +44,7 @@ export async function GET() {
         c.ordine
     `;
 
-    const datiPuliti = cocktail;
+    const datiPuliti = sanitizeRows(cocktail);
 
     // Estrai le sezioni uniche mantenendo l'ordine
     const sezioni = [...new Set(datiPuliti.map((c: Record<string, unknown>) => c.sezione as string))];
@@ -55,7 +55,7 @@ export async function GET() {
     });
 
   } catch (err) {
-    console.error('❌ Errore API /api/cocktails:', err);
+    console.error('Errore API /api/cocktails:', err);
     return NextResponse.json(
       { error: 'Impossibile caricare i cocktail. Riprova tra poco.' },
       { status: 500 }
