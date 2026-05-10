@@ -3,8 +3,9 @@
  * NEXT.CONFIG.TS — Configurazione Next.js + Security Headers
  * =============================================================================
  * Questo file configura:
- * 1. Security Headers — protezione contro attacchi comuni
- * 2. Configurazione immagini — domini consentiti per le immagini esterne
+ * 1. Turbopack root — risolve warning sui lockfile multipli
+ * 2. Security Headers — protezione contro attacchi comuni
+ * 3. Configurazione immagini — domini consentiti per le immagini esterne
  * 
  * SECURITY HEADERS SPIEGATI:
  * - X-Content-Type-Options: previene il "MIME sniffing" (il browser non indovina il tipo file)
@@ -14,14 +15,18 @@
  * - Permissions-Policy: blocca l'accesso a webcam, microfono, geolocalizzazione
  * 
  * PER MODIFICARE:
- * - Per permettere iframe: cambia X-Frame-Options a "SAMEORIGIN"
+ * - Per bloccare iframe completamente: cambia X-Frame-Options a "DENY"
  * - Per aggiungere domini immagini: aggiungi a remotePatterns
  * =============================================================================
  */
 
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   // Security headers — applicati a TUTTE le risposte del server
   async headers() {
     return [
@@ -36,10 +41,10 @@ const nextConfig: NextConfig = {
             value: "nosniff",
           },
           {
-            // Impedisce che il sito venga incorniciato in un iframe
-            // Protegge da attacchi "clickjacking" (bottoni nascosti sopra il sito)
+            // Impedisce che il sito venga incorniciato in un iframe esterno
+            // SAMEORIGIN permette preview Vercel ma blocca iframe da altri domini
             key: "X-Frame-Options",
-            value: "DENY",
+            value: "SAMEORIGIN",
           },
           {
             // Attiva il filtro anti-XSS del browser
