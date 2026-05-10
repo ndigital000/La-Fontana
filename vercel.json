@@ -1,4 +1,15 @@
 {
-  "framework": "nextjs",
-  "rootDirectory": "la-fontana"
+  "version": 2,
+  "builds": [
+    {
+      "src": "la-fontana/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "la-fontana/$1"
+    }
+  ]
 }
